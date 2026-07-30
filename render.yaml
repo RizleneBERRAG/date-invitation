@@ -3,7 +3,7 @@ services:
     name: date-invitation
     runtime: docker
     plan: free
-    healthCheckPath: /pour-toi
+    healthCheckPath: /health
     envVars:
       - key: APP_ENV
         value: production
