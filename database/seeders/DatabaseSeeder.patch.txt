@@ -1,0 +1,3 @@
+Dans database/seeders/DatabaseSeeder.php, ajoute cette ligne dans run() :
+
+$this->call(InvitationSeeder::class);
