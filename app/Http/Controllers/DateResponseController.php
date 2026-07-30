@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvitationResponseReceived;
 use App\Models\Invitation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class DateResponseController extends Controller
 {
@@ -26,10 +29,29 @@ class DateResponseController extends Controller
             'personal_message' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $invitation->response()->updateOrCreate(
+        $dateResponse = $invitation->response()->updateOrCreate(
             ['invitation_id' => $invitation->id],
             [...$validated, 'confirmed_at' => now()]
         );
+
+        $notificationEmail = config('invitation.notification_email');
+
+        if (filled($notificationEmail)) {
+            try {
+                Mail::to($notificationEmail)->send(
+                    new InvitationResponseReceived(
+                        invitation: $invitation,
+                        dateResponse: $dateResponse,
+                    )
+                );
+            } catch (Throwable $exception) {
+                /*
+                 * La réponse reste enregistrée même si Gmail est momentanément
+                 * indisponible. L'erreur est conservée dans les logs Laravel.
+                 */
+                report($exception);
+            }
+        }
 
         return redirect()->route('invitation.confirmed', $invitation->token);
     }
