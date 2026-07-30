@@ -1,0 +1,2 @@
+@import './invitation-base.css';
+@import './mobile.css';
