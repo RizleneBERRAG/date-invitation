@@ -11,7 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        /*
+         * Render termine la connexion HTTPS avant de transmettre la requête
+         * au conteneur. Laravel doit donc faire confiance aux en-têtes du proxy
+         * afin de générer les liens, assets et redirections avec le bon schéma.
+         */
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
