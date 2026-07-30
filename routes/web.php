@@ -14,6 +14,12 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/pour-toi', function () {
+    return redirect()->route('invitation.show', [
+        'token' => 'pour-toi',
+    ]);
+});
+
 Route::get('/invitation/{token}', [InvitationController::class, 'show'])
     ->name('invitation.show');
 
