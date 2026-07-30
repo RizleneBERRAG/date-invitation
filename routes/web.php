@@ -4,6 +4,10 @@ use App\Http\Controllers\DateResponseController;
 use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 Route::get('/', function () {
     return redirect()->route('invitation.show', [
         'token' => 'pour-toi',
