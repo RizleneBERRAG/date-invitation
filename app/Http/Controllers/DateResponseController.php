@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\InvitationResponseReceived;
 use App\Models\Invitation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 use Throwable;
 
 class DateResponseController extends Controller
@@ -35,19 +34,64 @@ class DateResponseController extends Controller
         );
 
         $notificationEmail = config('invitation.notification_email');
+        $apiKey = config('invitation.brevo.api_key');
+        $senderEmail = config('invitation.brevo.sender_email');
+        $senderName = config('invitation.brevo.sender_name');
 
-        if (filled($notificationEmail)) {
+        if (filled($notificationEmail) && filled($apiKey) && filled($senderEmail)) {
             try {
-                Mail::to($notificationEmail)->send(
-                    new InvitationResponseReceived(
-                        invitation: $invitation,
-                        dateResponse: $dateResponse,
-                    )
-                );
+                $htmlContent = view('emails.invitation-response-received', [
+                    'invitation' => $invitation,
+                    'dateResponse' => $dateResponse,
+                ])->render();
+
+                $textLines = [
+                    'Nouvelle réponse à ton invitation',
+                    '',
+                    'Ambiance : '.$dateResponse->activity,
+                    'Date : '.$dateResponse->selected_date
+                        ->locale('fr')
+                        ->translatedFormat('l j F Y'),
+                    'Heure : '.str_replace(':', ' h ', $dateResponse->selected_time),
+                ];
+
+                foreach ([
+                    'Nourriture' => $dateResponse->food_preference,
+                    'Tenue' => $dateResponse->outfit_style,
+                    'Musique' => $dateResponse->music_choice,
+                    'Romantisme' => $dateResponse->romance_level,
+                    'Message' => $dateResponse->personal_message,
+                ] as $label => $value) {
+                    if (filled($value)) {
+                        $textLines[] = $label.' : '.$value;
+                    }
+                }
+
+                Http::timeout(15)
+                    ->acceptJson()
+                    ->withHeaders([
+                        'api-key' => $apiKey,
+                    ])
+                    ->post('https://api.brevo.com/v3/smtp/email', [
+                        'sender' => [
+                            'name' => $senderName,
+                            'email' => $senderEmail,
+                        ],
+                        'to' => [
+                            [
+                                'email' => $notificationEmail,
+                                'name' => $invitation->sender_name,
+                            ],
+                        ],
+                        'subject' => '💌 Nouvelle réponse à ton invitation',
+                        'htmlContent' => $htmlContent,
+                        'textContent' => implode("\n", $textLines),
+                    ])
+                    ->throw();
             } catch (Throwable $exception) {
                 /*
-                 * La réponse reste enregistrée même si Gmail est momentanément
-                 * indisponible. L'erreur est conservée dans les logs Laravel.
+                 * La réponse reste enregistrée même si l'API d'e-mail est
+                 * momentanément indisponible. L'erreur reste dans les logs.
                  */
                 report($exception);
             }
