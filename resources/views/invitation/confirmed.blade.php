@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fff7f4">
     <title>C’est un date 💕</title>
-    @vite(['resources/css/invitation.css', 'resources/js/invitation.js'])
+
+    <link
+        rel="stylesheet"
+        href="{{ route('invitation.asset', ['file' => 'invitation-base.css']) }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ route('invitation.asset', ['file' => 'mobile.css']) }}"
+    >
+    <script
+        src="{{ route('invitation.asset', ['file' => 'invitation.js']) }}"
+        defer
+    ></script>
 </head>
 <body class="confirmed-page">
 <main class="confirmation-wrap">
