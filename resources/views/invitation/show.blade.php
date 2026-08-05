@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fff7f4">
     <title>{{ $invitation->title }}</title>
-    @vite(['resources/css/invitation.css', 'resources/js/invitation.js'])
+
+    <link
+        rel="stylesheet"
+        href="{{ route('invitation.asset', ['file' => 'invitation-base.css']) }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ route('invitation.asset', ['file' => 'mobile.css']) }}"
+    >
+    <script
+        src="{{ route('invitation.asset', ['file' => 'invitation.js']) }}"
+        defer
+    ></script>
 </head>
 <body>
 <main class="invitation-page">
@@ -16,7 +28,10 @@
         <header class="topbar">
             <div class="brand-mark">💌</div>
             <div class="progress-wrap" aria-label="Progression">
-                <div class="progress-label"><span data-progress-text>Invitation</span><span data-progress-count>1 / 7</span></div>
+                <div class="progress-label">
+                    <span data-progress-text>Invitation</span>
+                    <span data-progress-count>1 / 7</span>
+                </div>
                 <div class="progress-track"><span data-progress-bar></span></div>
             </div>
         </header>
@@ -89,20 +104,34 @@
 
                 <div class="choice-grid">
                     <button class="choice-card" type="button" data-choice="activity" data-choice-value="Dîner romantique" data-choice-label="Dîner romantique">
-                        <span class="choice-emoji">🍝</span><strong>Dîner romantique</strong><small>Bien manger et parler trop longtemps.</small>
+                        <span class="choice-emoji">🍝</span>
+                        <strong>Dîner romantique</strong>
+                        <small>Bien manger et parler trop longtemps.</small>
                     </button>
+
                     <button class="choice-card" type="button" data-choice="activity" data-choice-value="Activité et compétition" data-choice-label="Activité et compétition">
-                        <span class="choice-emoji">🎳</span><strong>Activité et compétition</strong><small>Je te laisserai peut-être gagner.</small>
+                        <span class="choice-emoji">🎳</span>
+                        <strong>Activité et compétition</strong>
+                        <small>Je te laisserai peut-être gagner.</small>
                     </button>
+
                     <button class="choice-card" type="button" data-choice="activity" data-choice-value="Balade et coucher de soleil" data-choice-label="Balade et coucher de soleil">
-                        <span class="choice-emoji">🌅</span><strong>Balade et coucher de soleil</strong><small>Simple, joli et un peu cinéma.</small>
+                        <span class="choice-emoji">🌅</span>
+                        <strong>Balade et coucher de soleil</strong>
+                        <small>Simple, joli et un peu cinéma.</small>
                     </button>
+
                     <button class="choice-card" type="button" data-choice="activity" data-choice-value="Surprise" data-choice-label="Surprise">
-                        <span class="choice-emoji">🎁</span><strong>Surprend-moi</strong><small>Confiance maximale. Pression maximale.</small>
+                        <span class="choice-emoji">🎁</span>
+                        <strong>Surprend-moi</strong>
+                        <small>Confiance maximale. Pression maximale.</small>
                     </button>
                 </div>
 
-                <div class="step-actions"><button class="back-btn" type="button" data-back>Retour</button><button class="primary-btn" type="button" data-next>Continuer</button></div>
+                <div class="step-actions">
+                    <button class="back-btn" type="button" data-back>Retour</button>
+                    <button class="primary-btn" type="button" data-next>Continuer</button>
+                </div>
             </article>
 
             <article
@@ -113,9 +142,7 @@
             >
                 <div class="step-heading">
                     <p class="eyebrow">Étape 2</p>
-
                     <h2>Quand est-ce que je réserve ton sourire ?</h2>
-
                     <p>
                         Cette fois, c’est toi qui choisis le jour.
                         Prends une date qui te fait envie ✨
@@ -137,75 +164,46 @@
                             <span></span>
                         </div>
 
-                        <div class="calendar-top">
-                            Notre date
-                        </div>
-
-                        <div class="calendar-heart">
-                            💕
-                        </div>
-
-                        <span class="calendar-caption">
-                Journée importante
-            </span>
+                        <div class="calendar-top">Notre date</div>
+                        <div class="calendar-heart">💕</div>
+                        <span class="calendar-caption">Journée importante</span>
                     </div>
 
                     <div class="date-picker-content">
-            <span class="date-picker-kicker">
-                À toi de choisir
-            </span>
+                        <span class="date-picker-kicker">À toi de choisir</span>
 
-                        <h3 data-date-title>
-                            Quel jour te conviendrait ?
-                        </h3>
+                        <h3 data-date-title>Quel jour te conviendrait ?</h3>
 
                         <p data-date-preview>
                             Je garderai cette journée rien que pour toi.
                         </p>
 
                         <label class="date-input-wrapper">
-                <span class="date-input-label">
-                    Choisir notre date
-                </span>
+                            <span class="date-input-label">Choisir notre date</span>
 
                             <span class="date-input-control">
-                    <input
-                        id="chosen-date"
-                        class="date-choice-input"
-                        type="date"
-                        min="{{ now()->toDateString() }}"
-                        value="{{ old('selected_date') }}"
-                        data-date-picker
-                    >
+                                <input
+                                    id="chosen-date"
+                                    class="date-choice-input"
+                                    type="date"
+                                    min="{{ now()->toDateString() }}"
+                                    value="{{ old('selected_date') }}"
+                                    data-date-picker
+                                >
 
-                    <span class="date-input-icon" aria-hidden="true">
-                        📅
-                    </span>
-                </span>
+                                <span class="date-input-icon" aria-hidden="true">📅</span>
+                            </span>
                         </label>
 
                         <span class="date-reassurance">
-                Promis, je ne programmerai rien d’autre ce jour-là 😌
-            </span>
+                            Promis, je ne programmerai rien d’autre ce jour-là 😌
+                        </span>
                     </div>
                 </div>
 
                 <div class="step-actions">
-                    <button
-                        class="back-btn"
-                        type="button"
-                        data-back
-                    >
-                        Retour
-                    </button>
-
-                    <button
-                        class="primary-btn"
-                        type="button"
-                        data-next
-                    >
-                        Continuer
-                    </button>
+                    <button class="back-btn" type="button" data-back>Retour</button>
+                    <button class="primary-btn" type="button" data-next>Continuer</button>
                 </div>
             </article>
 
@@ -218,7 +216,13 @@
 
                 <div class="time-grid">
                     @foreach (($invitation->available_times ?? []) as $time)
-                        <button class="time-pill" type="button" data-choice="selected_time" data-choice-value="{{ $time }}" data-choice-label="{{ str_replace(':', ' h ', $time) }}">
+                        <button
+                            class="time-pill"
+                            type="button"
+                            data-choice="selected_time"
+                            data-choice-value="{{ $time }}"
+                            data-choice-label="{{ str_replace(':', ' h ', $time) }}"
+                        >
                             {{ str_replace(':', ' h ', $time) }}
                         </button>
                     @endforeach
@@ -227,7 +231,10 @@
                 <label class="field-label" for="custom-time">Une autre heure</label>
                 <input class="pretty-input" id="custom-time" type="time" data-custom-value="selected_time">
 
-                <div class="step-actions"><button class="back-btn" type="button" data-back>Retour</button><button class="primary-btn" type="button" data-next>Continuer</button></div>
+                <div class="step-actions">
+                    <button class="back-btn" type="button" data-back>Retour</button>
+                    <button class="primary-btn" type="button" data-next>Continuer</button>
+                </div>
             </article>
 
             <article class="step" data-step data-step-name="Détails">
@@ -273,7 +280,10 @@
                     </div>
                 </div>
 
-                <div class="step-actions"><button class="back-btn" type="button" data-back>Retour</button><button class="primary-btn" type="button" data-next>Continuer</button></div>
+                <div class="step-actions">
+                    <button class="back-btn" type="button" data-back>Retour</button>
+                    <button class="primary-btn" type="button" data-next>Continuer</button>
+                </div>
             </article>
 
             <article class="step" data-step data-step-name="Message">
@@ -283,8 +293,17 @@
                     <p>Une demande spéciale, un avertissement ou un compliment extrêmement mérité.</p>
                 </div>
 
-                <textarea class="pretty-textarea" name="personal_message" maxlength="500" placeholder="Écris quelque chose ici…">{{ old('personal_message') }}</textarea>
-                <div class="step-actions"><button class="back-btn" type="button" data-back>Retour</button><button class="primary-btn" type="button" data-next>Voir le récapitulatif</button></div>
+                <textarea
+                    class="pretty-textarea"
+                    name="personal_message"
+                    maxlength="500"
+                    placeholder="Écris quelque chose ici…"
+                >{{ old('personal_message') }}</textarea>
+
+                <div class="step-actions">
+                    <button class="back-btn" type="button" data-back>Retour</button>
+                    <button class="primary-btn" type="button" data-next>Voir le récapitulatif</button>
+                </div>
             </article>
 
             <article class="step" data-step data-step-name="Confirmation">
